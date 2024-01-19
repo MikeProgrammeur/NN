@@ -1,5 +1,5 @@
 import math
-import numpy as np 
+import numpy as np
 
 class Layer():
     def __init__(self):
@@ -30,8 +30,10 @@ class DenseLayer(Layer):
     def backward(self,output_gradient,learning_rate):
         "gives the input error gradient for a certain output gradient and update W and the bias "
         #updating bias and weight
-        self.__bias-= learning_rate*output_gradient
-        self.__weight-=learning_rate*output_gradient@np.transpose(input)
+        test=output_gradient*learning_rate
+        print(test,self.__bias)
+        self.__bias-= np.array([learning_rate])@output_gradient
+        self.__weight-=learning_rate@output_gradient@np.transpose(input)
         return np.transpose(self.__weight)@output_gradient
 
 
@@ -42,7 +44,9 @@ class ActivationLayer(Layer):
 
     def forward(self, input):
         self.__input=input
-        return self.__activation(input)
+        res=np.array([self.__activation(x) for x in input])
+        return res
     
     def backward(self,output_gradient,learning_rate):
-        return np.multiply(output_gradient,self.__activationderiv(input))
+        derivVect=np.array([self.__activationderiv(x) for x in output_gradient])
+        return np.multiply(output_gradient,derivVect)
